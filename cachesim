@@ -1,0 +1,15 @@
+.data 
+
+prompt: .asciiz "Enter a word size"
+cache: .space 1000
+
+.text 
+
+main:
+
+li $v0, 4
+la $a0, prompt
+syscall #print prompt
+li $v0, 5
+syscall #read an int
+add $a0,$v0,$zero #move to $a0

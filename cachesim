@@ -1,15 +1,11 @@
 .data 
 
-prompt: .asciiz "Enter a word size"
+#array order: line size, data size, miss penalty
+
+X: .word 2, 64, 5
+
 cache: .space 1000
 
 .text 
 
 main:
-
-li $v0, 4
-la $a0, prompt
-syscall #print prompt
-li $v0, 5
-syscall #read an int
-add $a0,$v0,$zero #move to $a0

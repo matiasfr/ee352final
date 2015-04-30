@@ -1,10 +1,14 @@
 .data 
 
-buffer: .space 1024
+buffer: .space 1000
 
 fnf:	.ascii  "The file was not found: "
 file:	.asciiz	"/Users/dylan5394/Desktop/ee352final/tracefile.txt"
 cont:	.ascii  "File contents: "
+
+
+newline: .asciiz "\n"
+space: .asciiz " "
 
 #array order: line size, data size, miss penalty
 X: .word 2, 64, 5
@@ -21,12 +25,21 @@ li $t2, 100 # exit condition loop 100 times
 li $t3, 0 #array access counter
 
 la $t0, cache
-add $t3, $t0, $0    # load address of array into $t3
+add $t3, $t3, $t0
 loop:
     beq $t2, $t1, escape #at 10 we go to Exit, defined below
     #access array
-    li $v0, 15 #set value to store 
-    sw $v0, ($t3)       # put number generated into array[n]
+    li $s0, 15 #set value to store 
+    sw $s0, 0($t3)
+    
+    li $v0, 1
+    lw $a0, 0($t3)
+    syscall
+    
+    li $v0, 4
+    la $a0, newline
+    syscall
+    
     addi $t3, $t3, 4    # next address   
     addi $t1, $t1, 1 #increment counter
     j loop #jumps back to the top of loop
@@ -42,11 +55,15 @@ open:
 	blt	$v0, 0, err	# Goto Error
  
 # Read Data
+	li $t6, 0
+	li $t7, 3
+fileloop:
+	beq $t6, $t7, close
 read:
 	li	$v0, 14		# Read File Syscall
 	move	$a0, $s6	# Load File Descriptor
 	la	$a1, buffer	# Load Buffer Address
-	li	$a2, 1024	# Buffer Size
+	li	$a2, 32	# Buffer Size
 	syscall
  
 # Print Data
@@ -54,6 +71,15 @@ print:
 	li	$v0, 4		# Print String Syscall
 	la	$a0, buffer	# Load Contents String
 	syscall
+	
+	li $v0, 4
+	la $a0, newline
+	syscall
+	
+	addi $t6, $t6, 1
+	
+	j fileloop
+	
  
 # Close File
 close:

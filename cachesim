@@ -11,7 +11,7 @@ newline: .asciiz "\n"
 space: .asciiz " "
 
 #array order: line size, data size, miss penalty
-X: .word 2, 64, 5
+X: .word 8, 64, 5
 .align 4
 cache: .space 1000
 
@@ -25,6 +25,10 @@ li $t2, 100 # exit condition loop 100 times
 li $t3, 0 #array access counter
 
 la $t0, cache
+
+la $t4, X
+lw $s7, 0($t4)
+
 add $t3, $t3, $t0
 loop:
     beq $t2, $t1, escape #at 10 we go to Exit, defined below
@@ -56,14 +60,14 @@ open:
  
 # Read Data
 	li $t6, 0
-	li $t7, 3
+	li $t7, 10
 fileloop:
 	beq $t6, $t7, close
 read:
 	li	$v0, 14		# Read File Syscall
 	move	$a0, $s6	# Load File Descriptor
 	la	$a1, buffer	# Load Buffer Address
-	li	$a2, 32	# Buffer Size
+	li	$a2, 10	# Buffer Size
 	syscall
  
 # Print Data
@@ -102,3 +106,24 @@ done:
 li $v0, 16 #system call for close file
 move $a0, $s6 #file descriptor to close
 syscall
+
+
+
+
+
+
+li $t6, 0
+li $t7, 10
+
+li $s6, 10
+
+la $t3, cache
+
+la $t4, X
+
+writecache:
+
+
+
+
+

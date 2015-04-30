@@ -119,8 +119,6 @@ li $s6, 10
 
 la $t3, cache
 
-la $t4, X
-
 writecache:
 
 

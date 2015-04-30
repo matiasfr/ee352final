@@ -109,19 +109,40 @@ syscall
 
 
 
+li $s3, 0 #hit counter
+li $s4, 0 #miss counter
 
+li $t0, 0 #cycle counter
+li $t6, 0 #loop counter
+li $t7, 10 #value we loop till
 
+li $s6, 10 #value we are looking for in cache
 
-li $t6, 0
-li $t7, 10
-
-li $s6, 10
-
-la $t3, cache
+la $t3, cache #load start address of cache into $t3
 
 writecache:
+beq $t6, $t7, finished #checks to see if we are done looping
+
+#Here we need to check if the specified memory location has the value we are looking for
+lw $s7, 0($t3)
+bne $s7, $s6, miss
 
 
+#Here we need to handle the case of a hit -- where the memory location does have our value
+hit:
+addi $s3, $s3, 1
 
+
+#Here we need to handle the case of a miss -- where the memory location does not have our value
+miss:
+addi $t0, $t0, 5 #increment our counter by the miss penalty if a miss occurs
+addi $s4, $s4, 1
+
+
+addi $t6, $t6, 1 #increment our loop counter
+addi $t0, $t0, 1 #increment our cycle counter
+j writecache
+
+finished:
 
 

@@ -13,7 +13,8 @@ space: .asciiz " "
 #array order: line size, data size, miss penalty
 X: .word 8, 64, 5
 .align 4
-cache: .space 1000
+cache: .word 0:1024
+mainmemory: .word 0:4096
 
 .text 
 
@@ -131,7 +132,7 @@ bne $s7, $s6, miss
 #Here we need to handle the case of a hit -- where the memory location does have our value
 hit:
 addi $s3, $s3, 1
-
+j increment
 
 #Here we need to handle the case of a miss -- where the memory location does not have our value
 miss:
@@ -139,6 +140,7 @@ addi $t0, $t0, 5 #increment our counter by the miss penalty if a miss occurs
 addi $s4, $s4, 1
 
 
+increment:
 addi $t6, $t6, 1 #increment our loop counter
 addi $t0, $t0, 1 #increment our cycle counter
 j writecache

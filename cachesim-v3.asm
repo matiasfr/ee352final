@@ -1,11 +1,10 @@
 	.data 
-
 newline: .asciiz "\n"
 space: .asciiz " "
 
 .align 4
-cache: .space 1024
-cachehead: .space 64
+cache: .word 0:1024
+cachehead: .word 0:64
 .text 
 
 main:
@@ -20,20 +19,25 @@ mainloop:
     #----------------Main loop
     
     	#generate random number
+    	jal generate_address
     	
     	#Map memory address
+    	#test
+	jal map
+	
+	#PRINT
+	li  $v0, 1           # service 1 is print integer
+    	move $a0, $t0
+	syscall
     	
     	#check if A is in cache
     	
     	#add A to the cache
     
-   	#unit test
-	li $t0, 2994
-	jal map
-	#PRINT
-	li  $v0, 1           # service 1 is print integer
-    	move $a0, $t0
-	syscall
+    	#add newline
+   	li $v0, 4
+  	la $a0, newline
+    	syscall
     
     #-------------------
     addi $t1, $t1, 1 #increment loop counter

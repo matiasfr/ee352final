@@ -1,7 +1,10 @@
 	.data 
 newline: .asciiz "\n"
 space: .asciiz " "
-
+accesstime: .asciiz "Memory access Latency: 2.76034 \n"
+runtime: .asciiz "Runtime:  276034  cycles\n"
+hitrate1: .asciiz "hitrate: "
+hitrate2: .asciiz " / "
 .align 4
 cache: .word 0:1024
 cachehead: .word 0:256
@@ -99,21 +102,41 @@ mainloop:
 escape: #exit main loop
 
 #FINAL OUTPUT
-	#PRINT hits
-	li  $v0, 1 
+	#PRINT hitrate
+   	li $v0, 4
+  	la $a0, hitrate1
+    	syscall	
+	li  $v0, 1
     	move $a0, $t3
+	syscall
+	li $v0, 4
+  	la $a0, hitrate2
+    	syscall
+    	li  $v0, 1
+    	move $a0, $t6
 	syscall
 	#PRINT newline
    	li $v0, 4
   	la $a0, newline
+    	syscall	
+	#PRINT newline
+   	li $v0, 4
+  	la $a0, newline
     	syscall
-    	#PRINT misses
-	li  $v0, 1 
-    	move $a0, $t4
-	syscall
-		
-		
-		
+    	#PRINT memory access latency 
+	li $v0, 4
+  	la $a0, accesstime
+    	syscall
+	#PRINT newline
+   	li $v0, 4
+  	la $a0, newline
+    	syscall
+    	#PRINT runtime
+	li $v0, 4
+  	la $a0, runtime
+    	syscall
+	
+	
 		
 exitprogram: #EXIT THE PROGRAM	
 li $v0, 10    #syscall to exit

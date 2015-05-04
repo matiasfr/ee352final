@@ -62,6 +62,26 @@ map:
 	move $ra, $t7
 	
 	jr $ra
+	
+generate_address:
+# Method: Generates a memory address
+#	Inputs: none
+#	Outputs: $t0, 32-bit memory address (2-4KB) 
+	move $t7, $ra # save S registers to stack 
+	jal save_s
+	move $ra, $t7
+	
+	li $a1, 4097 # 2-4KB addresses
+	li $v0, 42   #random
+	syscall 
+	
+	move $t0, $a0
+	
+	move $t7, $ra # load back s registers
+	jal load_s
+	move $ra, $t7
+	
+	jr $ra
 
 save_s:
 	addi $sp, $sp, -32 # alot space for 8 registers
